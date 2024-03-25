@@ -1,8 +1,7 @@
 package compi;
 
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.Set;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
@@ -17,16 +16,16 @@ import javax.swing.table.DefaultTableModel;
  */
 public class AnalisisLexico {
 
-    private final Set<String> PALABRAS_RESERVADAS = new HashSet<String>() {{
-        add("if"); add("else"); add("switch"); add("for"); add("do"); add("while");
-        add("console.log"); add("forEach"); add("break"); add("continue"); add("let");
-        add("const"); add("undefined"); add("typeof"); add("Number"); add("String");
-        add("any"); add("interface"); add("set"); add("get"); add("class"); add("toLowerCase");
-        add("toUpperCase"); add("length"); add("trim"); add("charAt"); add("startsWith");
-        add("endsWith"); add("indexOf"); add("Includes"); add("slice"); add("replace");
-        add("split"); add("push"); add("shift"); add("in"); add("of"); add("splice");
-        add("concat"); add("find"); add("findIndex"); add("filter"); add("map");
-        add("sort"); add("reverse"); add("true"); add("false"); add("null");
+    private final HashMap<String, Integer> PALABRAS_RESERVADAS = new HashMap<String, Integer>() {{
+        put("if", -62); put("else", -63); put("switch", -64); put("for", -65); put("do", -66); put("while", -67);
+        put("console.log", -68); put("forEach", -69); put("break", -70); put("continue", -71); put("let", -72);
+        put("const", -73); put("undefined", -74); put("typeof", -75); put("Number", -76); put("String", -77);
+        put("any", -78); put("interface", -79); put("set", -80); put("get", -81); put("class", -82); put("toLowerCase", -83);
+        put("toUpperCase", -84); put("length", -85); put("trim", -86); put("charAt", -87); put("startsWith", -88);
+        put("endsWith", -89); put("indexOf", -90); put("Includes", -91); put("slice", -92); put("replace", -93);
+        put("split", -94); put("push", -95); put("shift", -96); put("in", -97); put("of", -98); put("splice", -99);
+        put("concat", -100); put("find", -101); put("findIndex", -102); put("filter", -103); put("map", -104);
+        put("sort", -105); put("reverse", -106); put("true", -107); put("false", -108); put("null", -109);
     }};
     
     private final String text;
@@ -81,6 +80,8 @@ public class AnalisisLexico {
                 /* console.log condition */
                 
                 if (estado != -24 && estado != -61) { // A prueba de comentarios ñyejeje
+                    if (PALABRAS_RESERVADAS.containsKey(lexema)) estado = PALABRAS_RESERVADAS.get(lexema);
+                            
                     token = new Token(estado, lexema, linea);
                     listaTokens.add(token);
                 }
@@ -205,8 +206,8 @@ public class AnalisisLexico {
         // AGRUPAMIENTO
         else if (estado == -46 || estado == -47 || estado == -48 || estado == -49 || estado == -50 || estado == -51) col = 21;
         
-        else if (estado == -60) {
-            if (PALABRAS_RESERVADAS.contains(lexema)) {
+        else if (estado <= -60) {
+            if (PALABRAS_RESERVADAS.containsKey(lexema)) {
                 switch (lexema) {
                     case "true", "false" -> col = 8; // BOOL
                     case "null" -> col = 9; // NULL
