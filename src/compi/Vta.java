@@ -37,40 +37,18 @@ public class Vta extends javax.swing.JFrame {
     public Vta() {
         this.setTitle("Compi");
         
-        initComponents();
-        createTextArea();
-        initContadores();
-        initTables();
-        initMatrizLexico();
-    }
-    
-    private void createTextArea () {
         textArea = new RSyntaxTextArea();
         textArea.setFont(new Font("Monospaced", Font.PLAIN, 14));
         RTextScrollPane sp = new RTextScrollPane(textArea);
         panTextArea.add(sp);
-    }
-    
-    private void initContadores () {
-        DefaultTableModel model = (DefaultTableModel) tblContadores.getModel();
-        for (int columna = 0; columna < model.getColumnCount(); columna++) {
-            model.setValueAt(0, 0, columna);
-        }
-    }
-    
-    private void initTables () {
-        int[] tokensColumnSizes = {100, 300, 100};
-        for (int i = 0; i < tokensColumnSizes.length; i++) {
-            tblTokens.getColumnModel().getColumn(i).setPreferredWidth(tokensColumnSizes[i]);
-        }
         
-        int[] erroresColumnSizes = {50, 357, 200, 50, 50, 50};
-        for (int i = 0; i < erroresColumnSizes.length; i++) {
-            tblErrores.getColumnModel().getColumn(i).setPreferredWidth(erroresColumnSizes[i]);
-        }
-    }
-    
-    private void initMatrizLexico () {
+        int[] tokensColumnSizes = {100, 300, 100}, erroresColumnSizes = {50, 357, 200, 50, 50, 50};
+        for (int i = 0; i < tokensColumnSizes.length; i++) tblTokens.getColumnModel().getColumn(i).setPreferredWidth(tokensColumnSizes[i]);
+        for (int i = 0; i < erroresColumnSizes.length; i++) tblErrores.getColumnModel().getColumn(i).setPreferredWidth(erroresColumnSizes[i]);
+        
+        DefaultTableModel model = (DefaultTableModel) tblContadores.getModel();
+        for (int columna = 0; columna < model.getColumnCount(); columna++) model.setValueAt(0, 0, columna);
+        
         matrizLexico = OperacionesExcel.readExcel(MATRIZ_LEXICO_EXCEL_PATH, MATRIZ_LEXICO_SHEET_NAME);
     }
 
@@ -237,7 +215,6 @@ public class Vta extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAbrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAbrirActionPerformed
-        // TODO add your handling code here:
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Abrir Archivo Prueba");
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Text Files", "txt");
@@ -257,7 +234,6 @@ public class Vta extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAbrirActionPerformed
 
     private void btnCompilarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCompilarActionPerformed
-        // TODO add your handling code here:
         String text = textArea.getText() + "\n";
         analisisLexico = new AnalisisLexico(text, matrizLexico, tblContadores, tblTokens, tblErrores);
         cleanUp();
@@ -265,7 +241,8 @@ public class Vta extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCompilarActionPerformed
 
     private void cleanUp () {
-        initContadores();
+        DefaultTableModel model = (DefaultTableModel) tblContadores.getModel();
+        for (int columna = 0; columna < model.getColumnCount(); columna++) model.setValueAt(0, 0, columna);
         
         DefaultTableModel tblTokensModel = (DefaultTableModel) tblTokens.getModel();
         while (tblTokensModel.getRowCount() > 0) tblTokensModel.removeRow(0);
@@ -275,7 +252,6 @@ public class Vta extends javax.swing.JFrame {
     }
     
     private void btnExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcelActionPerformed
-        // TODO add your handling code here:
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Guardar Archivo Excel");
         fileChooser.setFileFilter(new FileNameExtensionFilter("Excel files (*.xlsx)", "xlsx"));
