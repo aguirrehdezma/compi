@@ -37,6 +37,8 @@ public class Vta extends javax.swing.JFrame {
     public Vta() {
         this.setTitle("Compi");
         
+        initComponents();
+        
         textArea = new RSyntaxTextArea();
         textArea.setFont(new Font("Monospaced", Font.PLAIN, 14));
         RTextScrollPane sp = new RTextScrollPane(textArea);
