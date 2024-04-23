@@ -19,13 +19,17 @@ public class AnalisisLexico {
     private final HashMap<String, Integer> PALABRAS_RESERVADAS = new HashMap<String, Integer>() {{
         put("if", -62); put("else", -63); put("switch", -64); put("for", -65); put("do", -66); put("while", -67);
         put("console.log", -68); put("forEach", -69); put("break", -70); put("continue", -71); put("let", -72);
-        put("const", -73); put("undefined", -74); put("typeof", -75); put("Number", -76); put("String", -77);
+        put("const", -73); put("undefined", -74); put("typeof", -75); put("number", -76); put("string", -77);
         put("any", -78); put("interface", -79); put("set", -80); put("get", -81); put("class", -82); put("toLowerCase", -83);
         put("toUpperCase", -84); put("length", -85); put("trim", -86); put("charAt", -87); put("startsWith", -88);
-        put("endsWith", -89); put("indexOf", -90); put("Includes", -91); put("slice", -92); put("replace", -93);
+        put("endsWith", -89); put("indexOf", -90); put("includes", -91); put("slice", -92); put("replace", -93);
         put("split", -94); put("push", -95); put("shift", -96); put("in", -97); put("of", -98); put("splice", -99);
         put("concat", -100); put("find", -101); put("findIndex", -102); put("filter", -103); put("map", -104);
         put("sort", -105); put("reverse", -106); put("true", -107); put("false", -108); put("null", -109);
+        put("console.read", -110); put("elseif", -111); put("case", -112); put("default", -113); put("return", -114);
+        put("expo", -115); put("sqrtv", -116); put("fromCharCode", -117); put("asc", -118); put("sen", -119);
+        put("val", -120); put("cos", -121); put("tan", -122); put("var", -123); put("new", -124); put("Array", -125);
+        put("boolean", -126); put("real", -127); put("exp", -128); put("function", -129); put("Method", -130);
     }};
     
     private final String text;
@@ -160,6 +164,8 @@ public class AnalisisLexico {
             case '\'' -> 28;
             case '@' -> 32;
             case '_' -> 33;
+            case '$' -> 35;
+            case '#' -> 36;
             default -> 34;
         };
     }
@@ -169,8 +175,6 @@ public class AnalisisLexico {
         
         // ERRORES
         if (estado >= 500 && estado <= 507) col = 0;
-        // IDENTIFICADORES
-        else if (estado == -59) col = 1;
         // COMENTARIOS
         else if (estado == -24 || estado == -61) col = 2;
         // CADENA
@@ -180,13 +184,13 @@ public class AnalisisLexico {
         // REAL
         else if (estado == -55) col = 6;
         // EXPONENCIAL
-        else if (estado == -56 || estado == -57 || estado == -58) col = 7;
+        else if (estado == -56) col = 7;
         // POSTFIX
         else if (estado == -2 || estado == -5) col = 10;
         // LOG BIN
         else if (estado == -7 || estado == -8 || estado == -10 || estado == -13) col = 11;
-        // CONTROL
-        else if (estado == -15 || estado == -16 || estado == -17 || estado == -18) col = 12;
+        // CONTROL ------------------------------------------------------------------------ -57 Y -58 SON '$' Y '#' ------------------------------------
+        else if (estado == -15 || estado == -16 || estado == -17 || estado == -18 || estado == -57 || estado == -58) col = 12;
         // MATEMATICOS
         else if (estado == -1 || estado == -4 || estado == -19 || estado == -22 || estado == -25) col = 13;
         // EXPONENTE
@@ -206,7 +210,7 @@ public class AnalisisLexico {
         // AGRUPAMIENTO
         else if (estado == -46 || estado == -47 || estado == -48 || estado == -49 || estado == -50 || estado == -51) col = 21;
         
-        else if (estado <= -60) {
+        else if (estado <= -59) {
             if (PALABRAS_RESERVADAS.containsKey(lexema)) {
                 switch (lexema) {
                     case "true", "false" -> col = 8; // BOOL

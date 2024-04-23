@@ -25,7 +25,7 @@ public class OperacionesExcel {
             XSSFWorkbook workbook = new XSSFWorkbook(fileInputStream);
             XSSFSheet sheet = workbook.getSheet(sheetName);
 
-            int numRows = 71, numCols = 35;
+            int numRows = 71, numCols = 37;
             int[][] mat = new int[numRows][numCols];
             for (int i = 1; i <= numRows; i++) {
                 for (int j = 1; j <= numCols; j++) {
