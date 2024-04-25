@@ -33,18 +33,21 @@ public class AnalisisLexico {
     }};
     
     private final String text;
-    private final int[][] matrizLexico;
+    private final int[][] matrizLexico, matrizSintaxis;
     private JTable tblContadores, tblTokens, tblErrores;
+    private int[] cntDiagramas;
     
     private LinkedList<Token> listaTokens;
     private LinkedList<Error> listaErrores;
     
-    public AnalisisLexico(String text, int[][] matrizLexico, JTable tblContadores, JTable tblTokens, JTable tblErrores) {
-        this.matrizLexico = matrizLexico;
+    public AnalisisLexico(String text, int[][] matrizLexico, int[][] matrizSintaxis, JTable tblContadores, JTable tblTokens, JTable tblErrores, int[] cntDiagramas) {
         this.text = text;
+        this.matrizLexico = matrizLexico;
+        this.matrizSintaxis = matrizSintaxis;
         this.tblContadores = tblContadores;
         this.tblTokens = tblTokens;
         this.tblErrores = tblErrores;
+        this.cntDiagramas = cntDiagramas;
         
         listaTokens = new LinkedList<>();
         listaErrores = new LinkedList<>();
@@ -53,7 +56,7 @@ public class AnalisisLexico {
     public void analizarLexico () {
         int estado = 0, col, linea = 1, currColumn = 1;
         String lexema = "";
-        boolean isConsoleLogEsperado = false;
+        boolean isConsoleAlgoEsperado = false;
         
         for (int i = 0; i < text.length(); i++) {
             char caracter = text.charAt(i);
@@ -64,14 +67,13 @@ public class AnalisisLexico {
                 Token token;
                 String lastLexema = (!listaTokens.isEmpty()) ? listaTokens.getLast().getLexema() : null;
                 
-                /* console.log condition */
-                if (isConsoleLogEsperado) {
-                    isConsoleLogEsperado = false;
-                    if (lexema.equals("log")) {
+                if (isConsoleAlgoEsperado) {
+                    isConsoleAlgoEsperado = false;
+                    if (lexema.equals("log") || lexema.equals("read")) {
                         listaTokens.removeLast();
                         listaTokens.removeLast();
 
-                        lexema = "console.log";
+                        lexema = "console." + lexema;
 
                         int IDENTIFICADOR_COL = 1, CONTROL_COL = 12;
                         int val = (int) tblContadores.getValueAt(0, IDENTIFICADOR_COL);
@@ -80,8 +82,7 @@ public class AnalisisLexico {
                         tblContadores.setValueAt(val - 1, 0, CONTROL_COL);
                     }
                 }
-                if (lastLexema != null && lastLexema.equals("console") && estado == -16) isConsoleLogEsperado = true;
-                /* console.log condition */
+                if (lastLexema != null && lastLexema.equals("console") && estado == -16) isConsoleAlgoEsperado = true;
                 
                 if (estado != -24 && estado != -61) { // A prueba de comentarios ñyejeje
                     if (PALABRAS_RESERVADAS.containsKey(lexema)) estado = PALABRAS_RESERVADAS.get(lexema);
@@ -124,8 +125,14 @@ public class AnalisisLexico {
                 }
             }
         }
-
-        fillTables();
+        
+        DefaultTableModel tblTokensModel = (DefaultTableModel) tblTokens.getModel();
+        for (var token : listaTokens) {
+            tblTokensModel.addRow(new Object[]{token.getToken(), token.getLexema(), token.getLinea()});
+        }
+        
+        AnalisisSintaxis analisisSintaxis = new AnalisisSintaxis(matrizSintaxis, listaTokens, listaErrores, tblErrores, tblContadores, cntDiagramas);
+        analisisSintaxis.analizarSintaxis();
     }
     
     private int calcularColumna (char caracter) {
@@ -189,7 +196,7 @@ public class AnalisisLexico {
         else if (estado == -2 || estado == -5) col = 10;
         // LOG BIN
         else if (estado == -7 || estado == -8 || estado == -10 || estado == -13) col = 11;
-        // CONTROL ------------------------------------------------------------------------ -57 Y -58 SON '$' Y '#' ------------------------------------
+        // CONTROL
         else if (estado == -15 || estado == -16 || estado == -17 || estado == -18 || estado == -57 || estado == -58) col = 12;
         // MATEMATICOS
         else if (estado == -1 || estado == -4 || estado == -19 || estado == -22 || estado == -25) col = 13;
@@ -237,20 +244,6 @@ public class AnalisisLexico {
             case 507 -> "Se esperaba un número después del caracter '^'";
             default -> "";
         };
-    }
-    
-    private void fillTables () {
-        DefaultTableModel tblTokensModel = (DefaultTableModel) tblTokens.getModel();
-        for (var token : listaTokens) {
-            tblTokensModel.addRow(new Object[]{token.getToken(), token.getLexema(), token.getLinea()});
-        }
-        
-        DefaultTableModel tblErroresModel = (DefaultTableModel) tblErrores.getModel();
-        for (var error : listaErrores) {
-            tblErroresModel.addRow(new Object[]{
-                error.getToken(), error.getDescripcion(), error.getLexema(), error.getTipo(), error.getLinea(), error.getColError()
-            });
-        }
     }
     
 }

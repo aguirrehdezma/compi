@@ -28,8 +28,10 @@ public class Vta extends javax.swing.JFrame {
     
     AnalisisLexico analisisLexico;
     String MATRIZ_LEXICO_EXCEL_PATH = "src\\resources\\matriz_lexico.xlsx";
-    String MATRIZ_LEXICO_SHEET_NAME = "Hoja1";
-    int[][] matrizLexico;
+    String MATRIZ_SINTAXIS_EXCEL_PATH = "src\\resources\\matriz_sintaxis.xlsx";
+    String MATRIZ_SHEET_NAME = "Hoja1";
+    int[][] matrizLexico, matrizSintaxis;
+    int[] cntDiagramas;
     
     /**
      * Creates new form Vta
@@ -51,7 +53,8 @@ public class Vta extends javax.swing.JFrame {
         DefaultTableModel model = (DefaultTableModel) tblContadores.getModel();
         for (int columna = 0; columna < model.getColumnCount(); columna++) model.setValueAt(0, 0, columna);
         
-        matrizLexico = OperacionesExcel.readExcel(MATRIZ_LEXICO_EXCEL_PATH, MATRIZ_LEXICO_SHEET_NAME);
+        matrizLexico = OperacionesExcel.readExcel(MATRIZ_LEXICO_EXCEL_PATH, MATRIZ_SHEET_NAME, 71, 37);
+        matrizSintaxis = OperacionesExcel.readExcel(MATRIZ_SINTAXIS_EXCEL_PATH, MATRIZ_SHEET_NAME, 90, 130);
     }
 
     /**
@@ -237,7 +240,8 @@ public class Vta extends javax.swing.JFrame {
 
     private void btnCompilarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCompilarActionPerformed
         String text = textArea.getText() + "\n";
-        analisisLexico = new AnalisisLexico(text, matrizLexico, tblContadores, tblTokens, tblErrores);
+        cntDiagramas = new int[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0};
+        analisisLexico = new AnalisisLexico(text, matrizLexico, matrizSintaxis, tblContadores, tblTokens, tblErrores, cntDiagramas);
         cleanUp();
         analisisLexico.analizarLexico();
     }//GEN-LAST:event_btnCompilarActionPerformed
@@ -263,7 +267,7 @@ public class Vta extends javax.swing.JFrame {
             if (!filePath.toLowerCase().endsWith(".xlsx")) {
                 filePath += ".xlsx";
             }
-            OperacionesExcel.createExcel(filePath, tblContadores, tblTokens, tblErrores);
+            OperacionesExcel.createExcel(filePath, tblContadores, tblTokens, tblErrores, cntDiagramas);
         }
     }//GEN-LAST:event_btnExcelActionPerformed
 

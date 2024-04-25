@@ -6,7 +6,6 @@ package miscelaneo;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import javax.swing.JTable;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.xssf.usermodel.XSSFCell;
@@ -20,12 +19,11 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  */
 public class OperacionesExcel {
 
-    public static int[][] readExcel (String filePath, String sheetName) {
+    public static int[][] readExcel (String filePath, String sheetName, int numRows, int numCols) {
         try (FileInputStream fileInputStream = new FileInputStream(filePath)) {
             XSSFWorkbook workbook = new XSSFWorkbook(fileInputStream);
             XSSFSheet sheet = workbook.getSheet(sheetName);
-
-            int numRows = 71, numCols = 37;
+            
             int[][] mat = new int[numRows][numCols];
             for (int i = 1; i <= numRows; i++) {
                 for (int j = 1; j <= numCols; j++) {
@@ -42,7 +40,7 @@ public class OperacionesExcel {
         return null;
     }
     
-    public static void createExcel (String filePath, JTable tblContadores, JTable tblTokens, JTable tblErrores) {
+    public static void createExcel (String filePath, JTable tblContadores, JTable tblTokens, JTable tblErrores, int[] cntDiagramas) {
         XSSFWorkbook workbook = new XSSFWorkbook();
         
         XSSFSheet tokens = workbook.createSheet("Tokens");
@@ -101,6 +99,38 @@ public class OperacionesExcel {
             XSSFCell sheetCellTitulo = sheetRowTitulosContadores.createCell(i), sheetCellDatoContador = sheetRowDatosContadores.createCell(i);
             sheetCellTitulo.setCellValue(tblContadores.getColumnName(i));
             sheetCellDatoContador.setCellValue((int) tblContadores.getValueAt(0, i));
+        }
+        
+        String[] names = {
+            "STATU",
+            "OR",
+            "EXP_PAS",
+            "SIMPLEXEXPPASCAL",
+            "TERMINOPASCAL",
+            "AND",
+            "ELEVACION",
+            "FACTOR",
+            "MET_CAD",
+            "FUNCION",
+            "ASIG",
+            "LET",
+            "DEC_FUN",
+            "DEC_RETURN",
+            "TIPO",
+            "CONSTIPO",
+            "PPAL",
+            "CLASE",
+            "INTERF",
+            "DEC_VAR",
+            "ARR",
+            "DEC_MET"
+        };
+        XSSFSheet sintaxis = workbook.createSheet("Sintaxis");
+        for (int i = 0; i < 22; i++) {
+            XSSFRow sheetRowSintaxis = sintaxis.createRow(i);
+            XSSFCell sheetCellDiagramName = sheetRowSintaxis.createCell(0), sheetCellDiagramCount = sheetRowSintaxis.createCell(1);
+            sheetCellDiagramName.setCellValue(names[i]);
+            sheetCellDiagramCount.setCellValue(cntDiagramas[i]);
         }
         
         try (FileOutputStream fileOut = new FileOutputStream(filePath)) {
