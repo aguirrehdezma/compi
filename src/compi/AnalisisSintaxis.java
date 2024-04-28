@@ -11,8 +11,7 @@ public class AnalisisSintaxis {
     private final int[][] matrizSintaxis;
     private LinkedList<Token> listaTokens;
     private LinkedList<Error> listaErrores;
-    private JTable tblErrores;
-    private JTable tblContadores;
+    private JTable tblErrores, tblContadores;
     private int[] cntDiagramas;
             
     private Stack<Integer> pilaSintaxis;
@@ -67,7 +66,7 @@ public class AnalisisSintaxis {
         {20, 21, -41}, // C1 → === SIMPLEEXPPASCAL C1
         {20, 21, -44}, // C1 → !== SIMPLEEXPPASCAL C1
         {22, 23}, // SIMPLEEXPPASCAL → TERMINOPASCAL D1
-        {22, 23, -16}, // D1  → . TERMINOPASCAL D1
+        {22, 23, -4}, // D1  → - TERMINOPASCAL D1
         {22, 23, -1}, // D1 → + TERMINOPASCAL D1
         {22, 23, -30}, // D1 → << TERMINOPASCAL D1
         {22, 23, -34}, // D1 → >> TERMINOPASCAL D1
@@ -88,7 +87,7 @@ public class AnalisisSintaxis {
         {38}, // FACTOR → FUNCION
         {-2}, // H1 → ++
         {-5}, // H1 → --
-        {32, 79}, // H2 → ARR H3
+        {32, 78}, // H2 → ARR H3
         {-51, 34, -50}, // H2 → ( H5 )
         {33, 17, 40}, // H3 → ASIG OR H4
         {17, -18, 17, -45}, // H4 → ? OR : OR
@@ -118,7 +117,7 @@ public class AnalisisSintaxis {
         {-51, 17, -50, -121}, // FUNCION → cos ( OR )
         {-51, 17, -50, -122}, // FUNCION → tan ( OR )
         {37}, // FUNCION → MET_CAD
-        {}, // ASIG → =
+        {-38}, // ASIG → =
         {-3}, // ASIG → +=
         {-23}, // ASIG → /=
         {-21}, // ASIG → *=
@@ -139,10 +138,10 @@ public class AnalisisSintaxis {
         {66, -38}, // J4 → = CONSTIPO
         {46, -38}, // J2 → = J5
         {52}, // J5 → DEC_FUN
-        {1, -39, -51, 47, 78, -50}, // J5 → ( DEC_VAR J6 ) => STATU
-        {-51, 17, -50, -32, 48, -27, -125, -124}, // J5 → new Array < J7 > ( OR J8 )
+        {1, -39, -51, 47, 77, -50}, // J5 → ( DEC_VAR J6 ) => STATU
+        {-51, 49, 17, -50, -32, 48, -27, -125, -124}, // J5 → new Array < J7 > ( OR J8 )
         {-49, 50, -48}, // J5 → [ J9 ]
-        {47, 78, -15}, // J6  → , DEC_VAR J6
+        {47, 77, -15}, // J6  → , DEC_VAR J6
         {65}, // J7 → TIPO
         {-59}, // J7 → id
         {49, 17, -15}, // J8  → , OR J8
@@ -150,12 +149,12 @@ public class AnalisisSintaxis {
         {51, 17, -15}, // J10  → , OR J10
         {-47, 57, -46, 56, -51, 54, -50, 53, -129}, // DEC_FUN → function K1 ( K2 ) K4 { K5 }
         {-59}, // K1 → id
-        {55, 78}, // K2 → DEC_VAR K3
-        {55, 78, -15}, // K3  → , DEC_VAR K3
+        {55, 77}, // K2 → DEC_VAR K3
+        {55, 77, -15}, // K3  → , DEC_VAR K3
         {65, -18}, // K4  → : TIPO
-        {59, -17, 58, 78, -123}, // K5 → var DEC_VAR K6 ; K7
+        {59, -17, 58, 77, -123}, // K5 → var DEC_VAR K6 ; K7
         {59}, // K5 → K7
-        {58, 78, -15}, // K6  → , DEC_VAR K6 
+        {58, 77, -15}, // K6  → , DEC_VAR K6 
         {61, 1, 60, 52}, // K7 → DEC_FUN K8 STATU K9
         {61, 1}, // K7 → STATU K9
         {60, 52}, // K8 → DEC_FUN K8
@@ -178,35 +177,34 @@ public class AnalisisSintaxis {
         {-55}, // CONSTIPO → real
         {-109}, // CONSTIPO → null
         {-56}, // CONSTIPO → exponencial
-        {-47, 72, 1, -46}, // PPAL → M1 { STATU M5 }
-        {70, 41, 69, 76}, // M1 → INTERF M2 LET M3
-        {70, 41, 69, 73}, // M1 → CLASE M2 LET M3
-        {70, 41}, // M1 → LET M3
-        {71, 52}, // M1 → DEC_FUN M4
-        {68}, // M2 → M1
-        {70, 41, -17}, // M3  → ; LET M3
-        {71, 52}, // M3 → DEC_FUN M4
-        {71, 52, -17}, // M4  → ; DEC_FUN M4
-        {72, 1, -17}, // M5  → ; STATU M5
-        {-47, 75, 81, 74, 78, -46, -59, -82}, // CLASE → class id { DEC_VAR N1 DEC_MET N2 }
-        {74, 78, -17}, // N1  → ; DEC_VAR N1
-        {75, 81}, // N2 → DEC_MET N2
-        {-47, 77, 78, -46, -59, -79}, // INTERF → interface id { DEC_VAR O1 }
-        {77, 78, -17}, // O1 → ; DEC_VAR O1
+        {-47, 71, 1, -46, 68}, // PPAL → M1 { STATU M5 }
+        {68, 75}, // M1 → INTERF M1
+        {68, 72}, // M1 → CLASE M1
+        {69, 41}, // M1 → LET M3
+        {70, 52}, // M1 → DEC_FUN M4
+        {69, 41, -17}, // M3  → ; LET M3
+        {70, 52}, // M3 → DEC_FUN M4
+        {70, 52, -17}, // M4  → ; DEC_FUN M4
+        {71, 1, -17}, // M5  → ; STATU M5
+        {-47, 74, 80, 73, 77, -46, -59, -82}, // CLASE → class id { DEC_VAR N1 DEC_MET N2 }
+        {73, 77, -17}, // N1  → ; DEC_VAR N1
+        {74, 80}, // N2 → DEC_MET N2
+        {-47, 76, 77, -46, -59, -79}, // INTERF → interface id { DEC_VAR O1 }
+        {76, 77, -17}, // O1 → ; DEC_VAR O1
         {65, -18, -59}, // DEC_VAR → id : TIPO
-        {-49, 80, 17, -48}, // ARR → [ OR P1 ]
-        {80, 17, -15}, // P1  → , OR P1
-        {-47, 85, -46, 84, -51, 82, -50, -59, -130}, // DEC_MET → Method id ( Q1 ) Q3 { Q4 }
-        {83, 78}, // Q1 → DEC_VAR Q2
-        {83, 78, -15}, // Q2  → , DEC_VAR Q2
+        {-49, 79, 17, -48}, // ARR → [ OR P1 ]
+        {79, 17, -15}, // P1  → , OR P1
+        {-47, 84, -46, 83, -51, 81, -50, -59, -130}, // DEC_MET → Method id ( Q1 ) Q3 { Q4 }
+        {82, 77}, // Q1 → DEC_VAR Q2
+        {82, 77, -15}, // Q2  → , DEC_VAR Q2
         {65, -18}, // Q3  → : TIPO
-        {87, -17, 86, 78, -123}, // Q4  → var DEC_VAR Q5 ; Q6
-        {87}, // Q4 → Q6
-        {86, 78, -15}, // Q5  → , DEC_VAR Q5 
-        {89, 1, 88, 81}, // Q6 → DEC_MET Q7 STATU Q8
-        {89, 1}, // Q6 → STATU Q8
-        {88, 81}, // Q7 → DEC_MET Q7
-        {89, 1, -17}, // Q8  → ; STATU Q8
+        {86, -17, 85, 77, -123}, // Q4  → var DEC_VAR Q5 ; Q6
+        {86}, // Q4 → Q6
+        {85, 77, -15}, // Q5  → , DEC_VAR Q5 
+        {88, 1, 87, 80}, // Q6 → DEC_MET Q7 STATU Q8
+        {88, 1}, // Q6 → STATU Q8
+        {87, 80}, // Q7 → DEC_MET Q7
+        {88, 1, -17}, // Q8  → ; STATU Q8
     };
     
     public AnalisisSintaxis(int[][] matrizSintaxis, LinkedList<Token> listaTokens, LinkedList<Error> listaErrores, JTable tblErrores, JTable tblContadores, int[] cntDiagramas) {
@@ -225,25 +223,32 @@ public class AnalisisSintaxis {
         int cntErrores = 0;
         
         while (!listaTokens.isEmpty()) {
+            System.out.println("");
             if (!pilaSintaxis.isEmpty()) {
                 int elemPS = pilaSintaxis.peek();
-                System.out.println(elemPS);
                 Token token = listaTokens.getFirst();
+                
+                System.out.print("Se compara: " + elemPS + " vs " + token.getLexema());
                 
                 if (elemPS > 0) { // El tope es NT
                     int row = elemPS, col = Math.abs(token.getToken()) - 1;
                     int matVal = matrizSintaxis[row][col];
                     
-                    if (matVal >= 1 && matVal <= 184) { // Se encontró producción
+                    if (matVal >= 1 && matVal <= 183) { // Se encontró producción
                         int prod = pilaSintaxis.pop();
                         
                         if (diagramasPos.containsKey(prod)) cntDiagramas[diagramasPos.get(prod)]++; // Contadores
                         
-                        for (int elem : prods[matVal - 1]) pilaSintaxis.push(elem);
-                    } else if (matVal == 185) { // Se enconttró epsilon
+                        System.out.print("\nSe ingresan: ");
+                        for (int elem : prods[matVal - 1]) {
+                            System.out.print(elem + " ");
+                            pilaSintaxis.push(elem);
+                        }
+                    } else if (matVal == 184) { // Se encontró epsilon
                         pilaSintaxis.pop();
                     } else { // Se encontró error
                         Error error = new Error(matVal, clasificarError(matVal), token.getLexema(), "Sintaxis", token.getLinea(), 0);
+                        System.out.println("ERROR " + token.getLexema() + " " + matVal);
                         listaErrores.add(error);
                         cntErrores++;
                         
@@ -278,56 +283,6 @@ public class AnalisisSintaxis {
     
     private String clasificarError (int estado) {
         return switch (estado) {
-            case 508 -> "Se esperaba Console.read Console.log if { while cadena numérica true false real null exponencial ++ -- id ! ~ ( expo sqrtv fromCharCode asc sen val cos tan toLowerCase toUpperCase length trim charAt startsWith endsWith indexOf includes slice replace split return do for switch";
-            case 509 -> "Se esperaba ,";
-            case 510 -> "Se esperaba elseif";
-            case 511 -> "Se esperaba else";
-            case 512 -> "Se esperaba ;";
-            case 513 -> "Se esperaba cadena numérica true false real null exponencial ++ -- id ! ~ ( expo sqrtv fromCharCode asc sen val cos tan toLowerCase toUpperCase length trim charAt startsWith endsWith indexOf includes slice replace split {";
-            case 514 -> "Se esperaba cadena numérica true false real null exponencial ++ -- id ! ~ ( expo sqrtv fromCharCode asc sen val cos tan toLowerCase toUpperCase length trim charAt startsWith endsWith indexOf includes slice replace split let";
-            case 515 -> "Se esperaba cadena numérica true false real null exponencial ++ -- id ! ~ ( expo sqrtv fromCharCode asc sen val cos tan toLowerCase toUpperCase length trim charAt startsWith endsWith indexOf includes slice replace split";
-            case 516 -> "Se esperaba ,";
-            case 517 -> "Se esperaba cadena numérica true false real null exponencial ++ -- id ! ~ ( expo sqrtv fromCharCode asc sen val cos tan toLowerCase toUpperCase length trim charAt startsWith endsWith indexOf includes slice replace split $";
-            case 518 -> "Se esperaba in of";
-            case 519 -> "Se esperaba ;";
-            case 520 -> "Se esperaba break case default";
-            case 521 -> "Se esperaba case default";
-            case 522 -> "Se esperaba || |";
-            case 523 -> "Se esperaba < <= == != >= > === !==";
-            case 524 -> "Se esperaba . + << >> >>> ";
-            case 525 -> "Se esperaba * / % Ɛ";
-            case 526 -> "Se esperaba && & ^ ";
-            case 527 -> "Se esperaba **";
-            case 528 -> "Se esperaba ++ --";
-            case 529 -> "Se esperaba [ (";
-            case 530 -> "Se esperaba += /= *= -= %= &= ^= <<= >>= >>>=";
-            case 531 -> "Se esperaba ?";
-            case 532 -> "Se esperaba ! ~";
-            case 533 -> "Se esperaba toLowerCase toUpperCase length trim charAt startsWith endsWith indexOf includes slice replace split";
-            case 534 -> "Se esperaba expo sqrtv fromCharCode asc sen val cos tan toLowerCase toUpperCase length trim charAt startsWith endsWith indexOf includes slice replace split";
-            case 535 -> "Se esperaba let const var";
-            case 536 -> "Se esperaba : =";
-            case 537 -> "Se esperaba string number boolean real exp null # id";
-            case 538 -> "Se esperaba =";
-            case 539 -> "Se esperaba function ( new [";
-            case 540 -> "Se esperaba function";
-            case 541 -> "Se esperaba id";
-            case 542 -> "Se esperaba :";
-            case 543 -> "Se esperaba var function Console.read Console.log if { while cadena numérica true false real null exponencial ++ -- id ! ~ ( expo sqrtv fromCharCode asc sen val cos tan toLowerCase toUpperCase length trim charAt startsWith endsWith indexOf includes slice replace split return do for switch";
-            case 544 -> "Se esperaba function Console.read Console.log if { while cadena numérica true false real null exponencial ++ -- id ! ~ ( expo sqrtv fromCharCode asc sen val cos tan toLowerCase toUpperCase length trim charAt startsWith endsWith indexOf includes slice replace split return do for switch";
-            case 545 -> "Se esperaba {";
-            case 546 -> "Se esperaba set get";
-            case 547 -> "Se esperaba string number boolean real exp null #";
-            case 548 -> "Se esperaba cadena numérica true false real null exponencial";
-            case 549 -> "Se esperaba interface class let const var function";
-            case 550 -> "Se esperaba ; function";
-            case 551 -> "Se esperaba class";
-            case 552 -> "Se esperaba Method";
-            case 553 -> "Se esperaba interface";
-            case 554 -> "Se esperaba id";
-            case 555 -> "Se esperaba [";
-            case 556 -> "Se esperaba var Method Console.read Console.log if { while cadena numérica true false real null exponencial ++ -- id ! ~ ( expo sqrtv fromCharCode asc sen val cos tan toLowerCase toUpperCase length trim charAt startsWith endsWith indexOf includes slice replace split return do for switch";
-            case 557 -> "Se esperaba Method Console.read Console.log if { while cadena numérica true false real null exponencial ++ -- id ! ~ ( expo sqrtv fromCharCode asc sen val cos tan toLowerCase toUpperCase length trim charAt startsWith endsWith indexOf includes slice replace split return do for switch";
             default -> "";
         };
     }

@@ -54,7 +54,7 @@ public class Vta extends javax.swing.JFrame {
         for (int columna = 0; columna < model.getColumnCount(); columna++) model.setValueAt(0, 0, columna);
         
         matrizLexico = OperacionesExcel.readExcel(MATRIZ_LEXICO_EXCEL_PATH, MATRIZ_SHEET_NAME, 71, 37);
-        matrizSintaxis = OperacionesExcel.readExcel(MATRIZ_SINTAXIS_EXCEL_PATH, MATRIZ_SHEET_NAME, 90, 130);
+        matrizSintaxis = OperacionesExcel.readExcel(MATRIZ_SINTAXIS_EXCEL_PATH, MATRIZ_SHEET_NAME, 89, 130);
     }
 
     /**
