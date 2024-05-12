@@ -283,6 +283,54 @@ public class AnalisisSintaxis {
     
     private String clasificarError (int estado) {
         return switch (estado) {
+            case 508 -> "Se esperaba Console.read Console.log if { while cadena numérica true false real null exponencial ++ -- id ! ~ ( expo sqrtv fromCharCode asc sen val cos tan toLowerCase toUpperCase length trim charAt startsWith endsWith indexOf includes slice replace split return do for switch";
+            case 509 -> "Se esperaba ,";
+            case 510 -> "Se esperaba elseif";
+            case 511 -> "Se esperaba else";
+            case 512 -> "Se esperaba ;";
+            case 513 -> "Se esperaba cadena numérica true false real null exponencial ++ -- id ! ~ ( expo sqrtv fromCharCode asc sen val cos tan toLowerCase toUpperCase length trim charAt startsWith endsWith indexOf includes slice replace split {";
+            case 514 -> "Se esperaba cadena numérica true false real null exponencial ++ -- id ! ~ ( expo sqrtv fromCharCode asc sen val cos tan toLowerCase toUpperCase length trim charAt startsWith endsWith indexOf includes slice replace split let";
+            case 515 -> "Se esperaba cadena numérica true false real null exponencial ++ -- id ! ~ ( expo sqrtv fromCharCode asc sen val cos tan toLowerCase toUpperCase length trim charAt startsWith endsWith indexOf includes slice replace split";
+            case 516 -> "Se esperaba cadena numérica true false real null exponencial ++ -- id ! ~ ( expo sqrtv fromCharCode asc sen val cos tan toLowerCase toUpperCase length trim charAt startsWith endsWith indexOf includes slice replace split $";
+            case 517 -> "Se esperaba in of";
+            case 518 -> "Se esperaba break case default";
+            case 519 -> "Se esperaba case default";
+            case 520 -> "Se esperaba || |";
+            case 521 -> "Se esperaba < <= == != >= > === !==";
+            case 522 -> "Se esperaba - + << >> >>>";
+            case 523 -> "Se esperaba * / %";
+            case 524 -> "Se esperaba && & ^";
+            case 525 -> "Se esperaba **";
+            case 526 -> "Se esperaba ++ --";
+            case 527 -> "Se esperaba [ (";
+            case 528 -> "Se esperaba = += /= *= -= %= &= ^= <<= >>= >>>=";
+            case 529 -> "Se esperaba ?";
+            case 530 -> "Se esperaba ! ~";
+            case 531 -> "Se esperaba toLowerCase toUpperCase length trim charAt startsWith endsWith indexOf includes slice replace split";
+            case 532 -> "Se esperaba expo sqrtv fromCharCode asc sen val cos tan toLowerCase toUpperCase length trim charAt startsWith endsWith indexOf includes slice replace split";
+            case 533 -> "Se esperaba = += /= *= -= %= &= ^= <<= >>= >>>=";
+            case 534 -> "Se esperaba let const var";
+            case 535 -> "Se esperaba : =";
+            case 536 -> "Se esperaba string number boolean real exp null # id";
+            case 537 -> "Se esperaba =";
+            case 538 -> "Se esperaba function ( new [";
+            case 539 -> "Se esperaba function";
+            case 540 -> "Se esperaba id";
+            case 541 -> "Se esperaba :";
+            case 542 -> "Se esperaba var function Console.read Console.log if { while cadena numérica true false real null exponencial ++ -- id ! ~ ( expo sqrtv fromCharCode asc sen val cos tan toLowerCase toUpperCase length trim charAt startsWith endsWith indexOf includes slice replace split return do for switch";
+            case 543 -> "Se esperaba function Console.read Console.log if { while cadena numérica true false real null exponencial ++ -- id ! ~ ( expo sqrtv fromCharCode asc sen val cos tan toLowerCase toUpperCase length trim charAt startsWith endsWith indexOf includes slice replace split return do for switch";
+            case 544 -> "Se esperaba {";
+            case 545 -> "Se esperaba set get";
+            case 546 -> "Se esperaba string number boolean real exp null #";
+            case 547 -> "Se esperaba cadena numérica true false real null exponencial";
+            case 548 -> "Se esperaba interface class let const var function";
+            case 549 -> "Se esperaba ; function";
+            case 550 -> "Se esperaba class";
+            case 551 -> "Se esperaba Method";
+            case 552 -> "Se esperaba interface";
+            case 553 -> "Se esperaba [";
+            case 554 -> "Se esperaba var Method Console.read Console.log if { while cadena numérica true false real null exponencial ++ -- id ! ~ ( expo sqrtv fromCharCode asc sen val cos tan toLowerCase toUpperCase length trim charAt startsWith endsWith indexOf includes slice replace split return do for switch";
+            case 555 -> "Se esperaba Method Console.read Console.log if { while cadena numérica true false real null exponencial ++ -- id ! ~ ( expo sqrtv fromCharCode asc sen val cos tan toLowerCase toUpperCase length trim charAt startsWith endsWith indexOf includes slice replace split return do for switch";
             default -> "";
         };
     }
