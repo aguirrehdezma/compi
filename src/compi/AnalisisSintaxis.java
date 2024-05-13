@@ -17,8 +17,8 @@ public class AnalisisSintaxis {
     private Stack<Integer> pilaSintaxis;
     
     private final HashMap<Integer, Integer> diagramasPos = new HashMap<Integer, Integer>() {{
-            put(1, 0); put(17, 1); put(19, 2); put(21, 3); put(23, 4); put(25, 5); put(27, 6); put(29, 7); put(37, 8); put(38, 9); put(40, 10);
-            put(41, 11); put(52, 12); put(62, 13); put(65, 14); put(66, 15); put(67, 16); put(73, 17); put(76, 18); put(78, 19); put(79, 20); put(81, 21);
+        put(1, 0); put(17, 1); put(19, 2); put(21, 3); put(23, 4); put(25, 5); put(27, 6); put(29, 7); put(37, 8); put(38, 9); put(40, 10);
+        put(41, 11); put(52, 12); put(62, 13); put(65, 14); put(66, 15); put(67, 16); put(72, 17); put(75, 18); put(77, 19); put(78, 20); put(80, 21);
     }};
     
     private final int[][] prods = {
